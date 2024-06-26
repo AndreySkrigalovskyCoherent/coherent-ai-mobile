@@ -46,9 +46,9 @@ struct DocumentSearchView: View {
                 
                 HStack {
                     Picker("Document Type", selection: $viewModel.selectedDocumentType) {
-                        Text("All").tag(DocumentType?.none)
-                        ForEach(DocumentType.allCases) { type in
-                            Text(type.rawValue).tag(type as DocumentType?)
+                        Text("All").tag(Document.DocumentType?.none)
+                        ForEach(Document.DocumentType.allCases) { type in
+                            Text(type.rawValue).tag(type as Document.DocumentType?)
                         }
                     }
                     .pickerStyle(MenuPickerStyle())

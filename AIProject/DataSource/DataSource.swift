@@ -107,7 +107,7 @@ class DataSource {
         ]
         
         var documents = [Document]()
-        let documentTypes: [DocumentType] = [.policy, .procedure, .instruction, .report, .other]
+        let documentTypes: [Document.DocumentType] = [.policy, .procedure, .instruction, .report, .other]
         
         for (index, data) in documentData.enumerated() {
             let (title, content, summary) = data
