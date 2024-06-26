@@ -12,7 +12,7 @@ class DocumentSearchViewModel: ObservableObject {
     @Published var searchText = ""
     @Published var searchResults: [Document] = []
     @Published var sortOption: SortOption = .relevance
-    @Published var selectedDocumentType: DocumentType? = nil
+    @Published var selectedDocumentType: Document.DocumentType? = nil
     @Published var selectedDateFilter: DateFilter = .all
     
     enum SortOption: String, CaseIterable {
@@ -53,7 +53,7 @@ class DocumentSearchViewModel: ObservableObject {
         }
     }
     
-    func filterDocuments(_ documents: [Document], type: DocumentType?, dateFilter: DateFilter) -> [Document] {
+    func filterDocuments(_ documents: [Document], type: Document.DocumentType?, dateFilter: DateFilter) -> [Document] {
         var filteredDocuments = documents
         
         if let type = type {
