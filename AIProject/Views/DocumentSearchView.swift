@@ -8,19 +8,18 @@
 import SwiftUI
 
 struct DocumentSearchView: View {
-    @ObservedObject var viewModel = DocumentSearchViewModel()
-    
+    @StateObject private var viewModel = DocumentSearchViewModel()
+
     var body: some View {
         VStack {
-            // Search Bar
             HStack {
                 TextField("Search for documents", text: $viewModel.searchText)
                     .padding(10)
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
-                Button(action: {
+                Button {
                     viewModel.updateSearchResults()
-                }) {
+                } label: {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.white)
                         .padding(10)
@@ -30,53 +29,55 @@ struct DocumentSearchView: View {
             }
             .padding(.horizontal)
             .padding(.top, 10)
-            
-            // Sort and Filter Options
+
             VStack {
                 Picker("Sort By", selection: $viewModel.sortOption) {
                     ForEach(DocumentSearchViewModel.SortOption.allCases, id: \.self) { option in
-                        Text(option.rawValue).tag(option)
+                        Text(option.rawValue)
+                            .tag(option)
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 .padding(.horizontal)
-                .onChange(of: viewModel.sortOption) { _ in
+                .onChange(of: viewModel.sortOption) {
                     viewModel.updateSearchResults()
                 }
-                
+
                 HStack {
                     Picker("Document Type", selection: $viewModel.selectedDocumentType) {
-                        Text("All").tag(Document.DocumentType?.none)
+                        Text("All")
+                            .tag(Document.DocumentType?.none)
                         ForEach(Document.DocumentType.allCases) { type in
-                            Text(type.rawValue).tag(type as Document.DocumentType?)
+                            Text(type.rawValue)
+                                .tag(type)
                         }
                     }
                     .pickerStyle(MenuPickerStyle())
-                    .onChange(of: viewModel.selectedDocumentType) { _ in
+                    .onChange(of: viewModel.selectedDocumentType) {
                         viewModel.updateSearchResults()
                     }
                     .frame(maxWidth: .infinity)
-                    
+
                     Picker("Date", selection: $viewModel.selectedDateFilter) {
                         ForEach(DocumentSearchViewModel.DateFilter.allCases, id: \.self) { filter in
-                            Text(filter.rawValue).tag(filter)
+                            Text(filter.rawValue)
+                                .tag(filter)
                         }
                     }
                     .pickerStyle(MenuPickerStyle())
-                    .onChange(of: viewModel.selectedDateFilter) { _ in
+                    .onChange(of: viewModel.selectedDateFilter) {
                         viewModel.updateSearchResults()
                     }
                     .frame(maxWidth: .infinity)
                 }
                 .padding(.horizontal)
-                
+
                 Button("Reset Filters") {
                     viewModel.resetFilters()
                 }
                 .padding(.vertical, 10)
             }
-            
-            // Results List
+
             if viewModel.searchResults.isEmpty && !viewModel.searchText.isEmpty {
                 VStack {
                     Image(systemName: "exclamationmark.triangle.fill")
@@ -85,6 +86,8 @@ struct DocumentSearchView: View {
                         .padding(.bottom, 10)
                     Text("No documents found. Please refine your search criteria.")
                         .foregroundColor(.gray)
+
+                    Spacer()
                 }
                 .padding()
             } else {
@@ -108,4 +111,3 @@ struct DocumentSearchView: View {
         .background(Color(.systemBackground).edgesIgnoringSafeArea(.all))
     }
 }
-
