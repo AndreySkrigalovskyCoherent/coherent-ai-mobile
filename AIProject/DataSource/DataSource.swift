@@ -7,8 +7,19 @@
 
 import Foundation
 
-class DataSource {
-    static func generateDocuments() -> [Document] {
+final class DataSource {
+    static let shared = DataSource()
+
+    private init() {}
+
+    func searchDocuments(with keywords: String) -> [Document] {
+        documents.filter {
+            $0.title.localizedCaseInsensitiveContains(keywords) || 
+            $0.content.localizedCaseInsensitiveContains(keywords)
+        }
+    }
+
+    private var documents: [Document] = {
         let documentData = [
             ("Company Policies", "This document contains the company policies regarding workplace behavior, dress code, and other important guidelines.", "Company policies on operations and behavior."),
             ("Project Plan", "The project plan outlines the steps, timelines, and resources needed to complete the project.", "Steps, resources, and timeline for project completion."),
@@ -107,7 +118,7 @@ class DataSource {
         ]
         
         var documents = [Document]()
-        let documentTypes: [Document.DocumentType] = [.policy, .procedure, .instruction, .report, .other]
+        let documentTypes = Document.DocumentType.allCases
         
         for (index, data) in documentData.enumerated() {
             let (title, content, summary) = data
@@ -119,10 +130,5 @@ class DataSource {
         }
         
         return documents
-    }
-    
-    static func searchDocuments(with keywords: String) -> [Document] {
-        let allDocuments = generateDocuments()
-        return allDocuments.filter { $0.title.localizedCaseInsensitiveContains(keywords) || $0.content.localizedCaseInsensitiveContains(keywords) }
-    }
+    }()
 }
