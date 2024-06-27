@@ -36,7 +36,7 @@ class DocumentSearchViewModel: ObservableObject {
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
             .removeDuplicates { ($0.0, $0.1, $0.2, $0.3) == ($1.0, $1.1, $1.2, $1.3) }
             .map { [unowned self] keywords, sortOption, documentType, dateFilter in
-                self.sortDocuments(self.filterDocuments(DataSource.searchDocuments(with: keywords), type: documentType, dateFilter: dateFilter), by: sortOption)
+                self.sortDocuments(self.filterDocuments(DataSource.shared.searchDocuments(with: keywords), type: documentType, dateFilter: dateFilter), by: sortOption)
             }
             .assign(to: \.searchResults, on: self)
     }
@@ -86,6 +86,6 @@ class DocumentSearchViewModel: ObservableObject {
     }
     
     func updateSearchResults() {
-        searchResults = sortDocuments(filterDocuments(DataSource.searchDocuments(with: searchText), type: selectedDocumentType, dateFilter: selectedDateFilter), by: sortOption)
+        searchResults = sortDocuments(filterDocuments(DataSource.shared.searchDocuments(with: searchText), type: selectedDocumentType, dateFilter: selectedDateFilter), by: sortOption)
     }
 }
