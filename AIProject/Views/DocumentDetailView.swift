@@ -10,13 +10,14 @@ import SwiftUI
 struct DocumentDetailView: View {
     @State private var isLoading = false
     @State private var error: Error?
+
     let document: Document
-    
+
     var body: some View {
         Group {
             if isLoading {
                 ProgressView()
-            } else if let error = error {
+            } else if let error {
                 VStack {
                     Text("An error occurred:")
                     Text(error.localizedDescription)
@@ -29,14 +30,18 @@ struct DocumentDetailView: View {
                 .navigationTitle(document.title)
             }
         }
-        .onAppear(perform: loadDocument)
+        .onAppear {
+            Task {
+                try await loadDocument()
+            }
+        }
     }
     
-    private func loadDocument() {
+    private func loadDocument() async throws {
         isLoading = true
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            isLoading = false
-        }
+
+        try await Task.sleep(nanoseconds: 1_000_000_000)
+
+        isLoading = false
     }
 }
