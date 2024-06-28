@@ -7,7 +7,15 @@
 
 import Foundation
 
-final class DataSource {
+/// A protocol that defines the interface for a data source.
+protocol DataSourceInterface {
+    /// Searches for documents based on the provided keywords.
+    /// - Parameter keywords: The keywords to search for.
+    /// - Returns: An array of `Document` objects that match the search criteria.
+    func searchDocuments(with keywords: String) -> [Document]
+}
+
+final class DataSource: DataSourceInterface {
     static let shared = DataSource()
 
     private init() {}

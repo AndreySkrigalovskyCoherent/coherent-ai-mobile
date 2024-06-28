@@ -28,9 +28,12 @@ final class DocumentSearchViewModel: ObservableObject {
     @Published var selectedDocumentType: Document.DocumentType?
     @Published var selectedDateFilter = DateFilter.all
 
+    private let dataSource: DataSourceInterface
     private var cancellable: AnyCancellable?
 
-    init() {
+    init(dataSource: DataSourceInterface = DataSource.shared) {
+        self.dataSource = dataSource
+
         cancellable = $searchText
             .combineLatest($sortOption, $selectedDocumentType, $selectedDateFilter)
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
@@ -40,7 +43,7 @@ final class DocumentSearchViewModel: ObservableObject {
 
                 return self.sortDocuments(
                     self.filterDocuments(
-                        DataSource.shared.searchDocuments(with: keywords),
+                        self.dataSource.searchDocuments(with: keywords),
                         type: documentType,
                         dateFilter: dateFilter),
                     by: sortOption)
@@ -57,7 +60,7 @@ final class DocumentSearchViewModel: ObservableObject {
     func updateSearchResults() {
         searchResults = sortDocuments(
             filterDocuments(
-                DataSource.shared.searchDocuments(with: searchText),
+                dataSource.searchDocuments(with: searchText),
                 type: selectedDocumentType,
                 dateFilter: selectedDateFilter),
             by: sortOption)
