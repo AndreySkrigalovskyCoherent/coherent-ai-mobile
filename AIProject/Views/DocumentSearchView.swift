@@ -49,7 +49,7 @@ struct DocumentSearchView: View {
                             .tag(Document.DocumentType?.none)
                         ForEach(Document.DocumentType.allCases) { type in
                             Text(type.rawValue)
-                                .tag(type)
+                                .tag(type as Document.DocumentType?)
                         }
                     }
                     .pickerStyle(MenuPickerStyle())
