@@ -7,7 +7,11 @@
 
 import Foundation
 
-final class DataSource {
+protocol DataSourceInterface {
+    func searchDocuments(with keywords: String) -> [Document]
+}
+
+final class DataSource: DataSourceInterface {
     static let shared = DataSource()
 
     private init() {}
