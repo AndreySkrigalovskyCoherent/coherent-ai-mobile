@@ -90,7 +90,7 @@ final class DocumentSearchViewModel: ObservableObject {
     ) -> [Document] {
         var filteredDocuments = documents
 
-        if let type = type {
+        if let type {
             filteredDocuments = filteredDocuments.filter { $0.type == type }
         }
 
